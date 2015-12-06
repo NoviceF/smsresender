@@ -2,12 +2,56 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="vertical" >
+    android:orientation="vertical"
+    android:weightSum="1">
 
     <TextView
-        android:id="@+id/message_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:id="@+id/is_have_phone"
+        android:layout_weight="0.10"
+        android:text="unknown" />
+
+    <EditText
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="@string/default_message_text" />
+        android:id="@+id/enter_phone"
+        android:layout_weight="0.10"
+        android:hint="global phone number"
+        android:clickable="false"
+        android:editable="true"
+        android:inputType="phone" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Apply new number"
+        android:id="@+id/button"
+        android:layout_weight="0.03"
+        android:layout_gravity="center_horizontal" />
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.55">
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="start service and exit"
+            android:id="@+id/button2"
+            android:layout_weight="0.10"
+            android:layout_gravity="center_vertical" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="stop service and exit"
+            android:id="@+id/button3"
+            android:layout_weight="0.10"
+            android:layout_gravity="center_vertical" />
+    </LinearLayout>
 
 </LinearLayout>

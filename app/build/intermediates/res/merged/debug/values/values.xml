@@ -4,4 +4,6 @@
     <eat-comment/>
     <string name="app_name">SMSTest</string>
     <string name="default_message_text">No message specified</string>
+    <string name="phone_tag">phone</string>
+    <string name="prefs_name">sms.app.preference</string>
 </resources>

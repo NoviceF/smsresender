@@ -1,7 +1,7 @@
 package com.birkettconsulting.sms.test;
 
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.util.Date;
+import java.util.Calendar;
 import java.util.concurrent.TimeUnit;
 
 import android.app.Service;
@@ -9,14 +9,20 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.telephony.SmsManager;
 import android.telephony.SmsMessage;
 import android.util.Log;
 
 public class SMSService extends Service {
 
     final String LOG_TAG = "sms.test.SMSService";
+    final String PREFS_NAME = LOG_TAG;
+    final String DATE_SIGN = "date";
+    final String TEXT_SIGN = "text";
+    String targetNumber;
 
     Runnable run = new Runnable() {
 
@@ -66,26 +72,26 @@ public class SMSService extends Service {
         }
 
         public void run() {
-            Intent intent = new Intent(SMSTestActivity.BROADCAST_ACTION);
-            Log.d(LOG_TAG, "MyRun#" + startId + " start, time = " + time);
-            try {
-                // сообщаем об старте задачи
-                intent.putExtra(SMSTestActivity.PARAM_TASK, task);
-                intent.putExtra(SMSTestActivity.PARAM_STATUS, SMSTestActivity.STATUS_START);
-                sendBroadcast(intent);
-
-                // начинаем выполнение задачи
-                TimeUnit.SECONDS.sleep(time);
-
-                // сообщаем об окончании задачи
-                intent.putExtra(SMSTestActivity.PARAM_STATUS, SMSTestActivity.STATUS_FINISH);
-                intent.putExtra(SMSTestActivity.PARAM_RESULT, time * 100);
-                sendBroadcast(intent);
-
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            stop();
+//            Intent intent = new Intent(SMSTestActivity.BROADCAST_ACTION);
+//            Log.d(LOG_TAG, "MyRun#" + startId + " start, time = " + time);
+//            try {
+//                // сообщаем об старте задачи
+//                intent.putExtra(SMSTestActivity.PARAM_TASK, task);
+//                intent.putExtra(SMSTestActivity.PARAM_STATUS, SMSTestActivity.STATUS_START);
+//                sendBroadcast(intent);
+//
+//                // начинаем выполнение задачи
+//                TimeUnit.SECONDS.sleep(time);
+//
+//                // сообщаем об окончании задачи
+//                intent.putExtra(SMSTestActivity.PARAM_STATUS, SMSTestActivity.STATUS_FINISH);
+//                intent.putExtra(SMSTestActivity.PARAM_RESULT, time * 100);
+//                sendBroadcast(intent);
+//
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            }
+//            stop();
         }
 
         void stop() {
@@ -119,8 +125,35 @@ public class SMSService extends Service {
                 String smsBody = smsMessage.getDisplayMessageBody();
                 if (smsBody != null) {
                     Log.d(LOG_TAG, "MyService receive sms = " + smsBody);
+
+                    SmsManager sms = SmsManager.getDefault();
+                    sms.sendTextMessage(targetNumber, null, smsBody, null, null);
                 }
             }
+        }
+
+        public void updatePreference(String messageContent) {
+            // Get from the SharedPreferences
+            SharedPreferences settings = getApplicationContext().getSharedPreferences(PREFS_NAME, 0);
+            String dateStr = settings.getString(DATE_SIGN, "");
+
+            if (dateStr.length() == 0) {
+                makeNewRecord(messageContent);
+            }
+
+            // need to compare last record date and current, if current newer - save current instead
+        }
+
+
+        public void makeNewRecord(String messageContent) {
+            Date dt = Calendar.getInstance().getTime();
+            String dateString = dt.toGMTString();
+            SharedPreferences settings = getApplicationContext().getSharedPreferences(PREFS_NAME, 0);
+            SharedPreferences.Editor editor = settings.edit();
+            editor.putString(DATE_SIGN, dateString);
+            editor.putString(TEXT_SIGN, messageContent);
+            // Apply the edits!
+            editor.commit();
         }
     };
 }

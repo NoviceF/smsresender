@@ -6,6 +6,7 @@
 
     <uses-sdk android:minSdkVersion="7" />
  	<uses-permission android:name="android.permission.RECEIVE_SMS"/>
+    <uses-permission android:name="android.permission.SEND_SMS"/>
   
     <application
         android:icon="@drawable/ic_launcher"
@@ -22,11 +23,6 @@
         <service
             android:name=".SMSService"
             android:label="My Service" >
-            <!--<receiver android:name=".SMSBroadcastReceiver">-->
-                <!--<intent-filter android:priority="2147483647">-->
-                    <!--<action android:name="android.provider.Telephony.SMS_RECEIVED"></action>-->
-                <!--</intent-filter>-->
-            <!--</receiver>-->
         </service>
         		
     </application>
