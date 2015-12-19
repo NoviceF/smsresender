@@ -50,9 +50,9 @@ action#android.intent.action.MAIN
 ADDED from /home/novice/proj/AndroidStudioProjects/SMSTest/app/src/main/AndroidManifest.xml:19:17-69
 	android:name
 		ADDED from /home/novice/proj/AndroidStudioProjects/SMSTest/app/src/main/AndroidManifest.xml:19:25-66
-service#com.birkettconsulting.sms.test.SMSService
+service#com.birkettconsulting.sms.test.CustomSMSService
 ADDED from /home/novice/proj/AndroidStudioProjects/SMSTest/app/src/main/AndroidManifest.xml:23:9-26:19
 	android:label
 		ADDED from /home/novice/proj/AndroidStudioProjects/SMSTest/app/src/main/AndroidManifest.xml:25:13-39
 	android:name
-		ADDED from /home/novice/proj/AndroidStudioProjects/SMSTest/app/src/main/AndroidManifest.xml:24:13-39
+		ADDED from /home/novice/proj/AndroidStudioProjects/SMSTest/app/src/main/AndroidManifest.xml:24:13-45

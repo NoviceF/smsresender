@@ -24,7 +24,7 @@
         </activity>
 
         <service
-            android:name="com.birkettconsulting.sms.test.SMSService"
+            android:name="com.birkettconsulting.sms.test.CustomSMSService"
             android:label="My Service" >
         </service>
     </application>

@@ -21,7 +21,7 @@
         </activity>
 
         <service
-            android:name=".SMSService"
+            android:name=".CustomSMSService"
             android:label="My Service" >
         </service>
         		

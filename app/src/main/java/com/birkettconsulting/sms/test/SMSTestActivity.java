@@ -21,9 +21,13 @@ import android.app.Activity;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
+
 
 public class SMSTestActivity extends Activity {
 
@@ -31,32 +35,55 @@ public class SMSTestActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
-//    	setMessageIfNotNull(getMessageFromIntent(getIntent()));
 
-        TextView isHavePhoneTW = (TextView)findViewById(R.id.is_have_phone);
+        initButtons();
+        startSMSService();
 
-        if (isHavePhoneTW.length() == 0) {
+//        updateServiceStatus(true);
 
-        }
+
+//        if (isHavePhoneTW.length() == 0) {
+//
+//        }
 //        myAwesomeTextView.setText("My Awesome Text");
 //        PhoneNumberUtils.isGlobalPhoneNumber("+912012185234"));
 
 
-
-//        startService();
 //        finish();
     }
 
-    void startService() {
+    private void initButtons() {
+        TextView statusTextView = (TextView)findViewById(R.id.StatusMarqueeText);
+        statusTextView.setTextColor(Color.WHITE);
+        statusTextView.setBackgroundColor(Color.YELLOW);
+        statusTextView.setText("Service unknown state");
+
+        Button buttonStartService = (Button) findViewById(R.id.startButton);
+        buttonStartService.setOnClickListener(new Button.OnClickListener() {
+            public void onClick(View v) {
+                startSMSService();
+            }
+        });
+
+        Button buttonStopService = (Button) findViewById(R.id.stopButton);
+        buttonStopService.setOnClickListener(new Button.OnClickListener() {
+            public void onClick(View v) {
+                stopSMSService();
+            }
+        });
+    }
+
+    void startSMSService() {
         // Создаем Intent для вызова сервиса,
         // кладем туда параметр времени и код задачи
-        Intent intent = new Intent(this, SMSService.class);
+        Intent intent = new Intent(this, CustomSMSService.class);
         // стартуем сервис
         startService(intent);
+    }
 
-        Toast toast = Toast.makeText(getApplicationContext(),
-                "Runing smsservice!", Toast.LENGTH_SHORT);
-        toast.show();
+    void stopSMSService() {
+        Intent intent = new Intent(this, CustomSMSService.class);
+        stopService(intent);
     }
 
     String getTargetNumberFromPrefs() {
@@ -76,5 +103,42 @@ public class SMSTestActivity extends Activity {
         editor.putString(phoneTage, phoneNumber);
         // Apply the edits!
         editor.commit();
+    }
+
+    void updateServiceStatus(boolean status) {
+
+        TextView statusTextView = (TextView)findViewById(R.id.StatusMarqueeText);
+        statusTextView.setTextColor(Color.WHITE);
+
+        if (status) {
+            statusTextView.setBackgroundColor(Color.GREEN);
+            statusTextView.setText("Service running");
+        } else {
+            statusTextView.setBackgroundColor(Color.RED);
+            statusTextView.setText("Service Stopped");
+        }
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        updateServiceStatusFromIntent(getMessageFromIntent(intent));
+    }
+
+    private void updateServiceStatusFromIntent(String text) {
+        assert(text != null);
+
+        if (text != null) {
+            if (text.compareTo(CustomSMSService.SERVICE_STATUS_UP) == 0) {
+                Log.d("CustomMyActivity", "Activity update status to UP");
+                updateServiceStatus(true);
+            } else if (text.compareTo(CustomSMSService.SERVICE_STATUS_DOWN) == 0) {
+                Log.d("CustomMyActivity", "Activity update status to DOWN");
+                updateServiceStatus(false);
+            }
+        }
+    }
+
+    private String getMessageFromIntent(Intent intent) {
+        return intent.getStringExtra(CustomSMSService.SERVICE_STATUS_SIGN);
     }
 }
