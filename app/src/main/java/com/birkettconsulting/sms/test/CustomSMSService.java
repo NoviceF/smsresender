@@ -1,15 +1,21 @@
 package com.birkettconsulting.sms.test;
 
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.provider.SyncStateContract;
 import android.telephony.SmsManager;
 import android.telephony.SmsMessage;
 import android.util.Log;
+import android.graphics.BitmapFactory;
 
 public class CustomSMSService extends Service {
 
@@ -18,6 +24,9 @@ public class CustomSMSService extends Service {
     public static final String SERVICE_STATUS_SIGN = "service_status";
     public static final String SERVICE_STATUS_UP = "service_UP";
     public static final String SERVICE_STATUS_DOWN = "service_DOWN";
+
+    private static final int NOTIFICATION_ID = 1;
+    private static final String SERVICE_NOTIFICATION_NAME = "SMS resender service";
 
     private String targetNumber;
 
@@ -40,6 +49,26 @@ public class CustomSMSService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.d(LOG_TAG, "MyService onStartCommand");
         startMainActivity(this, SERVICE_STATUS_UP);
+
+//        Bitmap icon = BitmapFactory.decodeResource(getResources(),
+//                R.drawable.ic_launcher);
+//
+        NotificationManager notificationManager = (NotificationManager) this
+                .getSystemService(Context.NOTIFICATION_SERVICE);
+
+        Notification notification = new Notification(R.drawable.ic_launcher,
+                SERVICE_NOTIFICATION_NAME, System.currentTimeMillis());
+        notification.flags = Notification.FLAG_AUTO_CANCEL;
+        PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
+                getActivityIntent(this, "msg for pending intent"), PendingIntent.FLAG_UPDATE_CURRENT);
+
+        notification.setLatestEventInfo(this, SERVICE_NOTIFICATION_NAME, SERVICE_STATUS_UP, contentIntent);
+
+        notificationManager.cancel(NOTIFICATION_ID);
+        notificationManager.notify(NOTIFICATION_ID, notification);
+
+        startForeground(NOTIFICATION_ID, notification);
+
         return super.onStartCommand(intent, flags, startId);
     }
 

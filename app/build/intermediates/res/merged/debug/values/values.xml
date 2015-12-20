@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- From: file:/home/novice/proj/AndroidStudioProjects/SMSTest/app/src/main/res/values/strings.xml -->
+    <!-- From: file:/home/novice/git/android/SMSTest/smsresender/app/src/main/res/values/strings.xml -->
     <eat-comment/>
     <string name="app_name">SMSTest</string>
     <string name="default_message_text">No message specified</string>
