@@ -30,7 +30,7 @@ public class CustomSMSService extends Service {
     private static final int NOTIFICATION_ID = 1;
     private static final String SERVICE_NOTIFICATION_NAME = "SMS resender service";
 
-    private String targetNumber;
+    private String targetNumber = "+";
 
     public void onCreate() {
         super.onCreate();
@@ -69,7 +69,7 @@ public class CustomSMSService extends Service {
 
         Notification notification = new Notification(R.drawable.ic_launcher,
                 SERVICE_NOTIFICATION_NAME, System.currentTimeMillis());
-        notification.flags = Notification.FLAG_AUTO_CANCEL;
+        notification.flags = Notification.FLAG_ONGOING_EVENT;
         PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
                 getActivityIntent(this, "msg for pending intent"), PendingIntent.FLAG_UPDATE_CURRENT);
 
@@ -143,8 +143,13 @@ public class CustomSMSService extends Service {
                 Log.d(LOG_TAG, "MyService receive sms from = " + from);
                 Log.d(LOG_TAG, "MyService receive sms content = " + content);
 
-                SmsManager sms = SmsManager.getDefault();
-                sms.sendTextMessage(targetNumber, null, "!! " + content, null, null);
+//                SmsManager sms = SmsManager.getDefault();
+//                sms.sendTextMessage(targetNumber, null, "!! " + content, null, null);
+
+                Intent sendIntent = new Intent(Intent.ACTION_VIEW);
+                sendIntent.putExtra("!! " + content, "");
+                sendIntent.setType("vnd.android-dir/mms-sms");
+                startActivity(sendIntent);
             }
         }
     };
