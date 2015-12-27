@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.birkettconsulting.sms.test.test">
+    package="com.no.sms.resender.test">
 
     <uses-sdk android:minSdkVersion="7" android:targetSdkVersion="7" />
 
@@ -9,8 +9,8 @@
     </application>
 
     <instrumentation android:name="android.test.InstrumentationTestRunner"
-                     android:targetPackage="com.birkettconsulting.sms.test"
+                     android:targetPackage="com.no.sms.resender"
                      android:handleProfiling="false"
                      android:functionalTest="false"
-                     android:label="Tests for com.birkettconsulting.sms.test"/>
+                     android:label="Tests for com.no.sms.resender"/>
 </manifest>

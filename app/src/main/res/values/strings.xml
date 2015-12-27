@@ -2,7 +2,7 @@
 <resources>
 
     <string name="default_message_text">No message specified</string>
-    <string name="app_name">SMSTest</string>
+    <string name="app_name">SMSResender</string>
     <string name="prefs_name">sms.app.preference</string>
     <string name="phone_tag">phone</string>
 
